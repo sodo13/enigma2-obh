@@ -80,6 +80,8 @@ DEFAULT_SKIN = "PLi-HD/skin.xml"
 if not fileExists(resolveFilename(SCOPE_SKIN, DEFAULT_SKIN)):
 	# in that case, fallback to Magic (which is an SD skin)
 	DEFAULT_SKIN = "Magic/skin.xml"
+#forced skin default by black hole
+DEFAULT_SKIN = "skin.xml"
 config.skin.primary_skin = ConfigText(default=DEFAULT_SKIN)
 
 profile("LoadSkin")
@@ -397,7 +399,17 @@ class AttributeParser:
 
 def applySingleAttribute(guiObject, desktop, attrib, value, scale = ((1,1),(1,1))):
 	# Someone still using applySingleAttribute?
-	AttributeParser(guiObject, desktop, scale).applyOne(attrib, value)
+	if attrib == 'animationMode':
+			guiObject.setAnimationMode(
+				{ "disable": 0x00,
+					"off": 0x00,
+					"offshow": 0x10,
+					"offhide": 0x01,
+					"onshow": 0x01,
+					"onhide": 0x10,
+				}[value])
+	else:
+		AttributeParser(guiObject, desktop, scale).applyOne(attrib, value)
 
 def applyAllAttributes(guiObject, desktop, attributes, scale):
 	AttributeParser(guiObject, desktop, scale).applyAll(attributes)
